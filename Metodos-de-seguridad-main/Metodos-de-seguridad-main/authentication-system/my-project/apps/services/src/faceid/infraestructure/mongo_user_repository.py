@@ -3,16 +3,22 @@ from bson.objectid import ObjectId
 import pickle
 import base64
 from datetime import datetime
+import os # <-- IMPORTANTE
 
 # Imports corregidos (sin ".." y sin sys.path)
 from ports.user_repository_port import UserRepositoryPort
 
 class MongoUserRepository(UserRepositoryPort):
     
-    def __init__(self, uri="mongodb://localhost:27017", db_name="autentication"): # <-- CORREGIDO
-        self.client = MongoClient(uri)
-        self.db = self.client[db_name]
-        self.collection = self.db["users"] # "users" (plural) es correcto
+    def __init__(self):
+
+        mongo_uri = os.getenv('MONGODB_URI', 'mongodb+srv://autentication:gashj421b@cluster0.xoe7f.mongodb.net/autentication?retryWrites=true&w=majority&appName=Cluster0')
+        db_name = os.getenv('MONGODB_DB_NAME', 'autentication')
+        
+        
+        self.client = MongoClient(mongo_uri) # <-- Usar la variable
+        self.db = self.client[db_name]       # <-- Usar la variable
+        self.collection = self.db["users"]
         self.db_name = db_name
 
     def check_db_connection(self):
@@ -23,7 +29,6 @@ class MongoUserRepository(UserRepositoryPort):
             return False, self.db_name
 
     def save_user(self, email, hashed_password, first_name, face_encoding, auth_method="faceid"):
-        # Serializar encoding facial (convertir a texto base64 para guardarlo en Mongo)
         secret = base64.b64encode(pickle.dumps(face_encoding)).decode('utf-8')
         
         existing_user = self.collection.find_one({"email": email})
@@ -65,19 +70,11 @@ class MongoUserRepository(UserRepositoryPort):
         return user
 
     def get_all_users(self):
-        # Excluye campos sensibles
         projection = {"password": 0, "secret": 0}
-        
-        # --- INICIO DE LA CORRECCIÓN (Busca en toda la colección) ---
-        users = list(self.collection.find({}, projection)) # Convertir a lista
-        
-        # Imprimir para depuración
-        print(f"Query: find({{}}), Encontrados: {len(users)} usuarios")
-        # --- FIN DE LA CORRECCIÓN ---
+        users = self.collection.find({}, projection).sort("created_at", -1)
         
         users_list = []
         for user in users:
-            
             created_at_val = user.get('created_at')
             created_at_iso = None
             if isinstance(created_at_val, datetime):
@@ -89,9 +86,6 @@ class MongoUserRepository(UserRepositoryPort):
                 'first_name': user.get('first_name', ''),
                 'createdAt': created_at_iso
             })
-        
-        # Ordenar la lista de Python
-        users_list.sort(key=lambda x: x['createdAt'] or '', reverse=True)
         return users_list
 
     def delete_user_by_id(self, user_id: str):
