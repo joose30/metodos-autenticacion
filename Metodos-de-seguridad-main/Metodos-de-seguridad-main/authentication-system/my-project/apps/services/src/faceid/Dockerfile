@@ -1,24 +1,27 @@
-# 1. Usar una imagen de Python 3.11 (estable para dlib)
+# 1. Usar una imagen de Python 3.11 (compatible con dlib)
 FROM python:3.11-slim
 
 # 2. Instalar dependencias del sistema operativo (Linux)
-# cmake es para dlib, libgl1 es para opencv
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-&& rm -rf /var/lib/apt/lists/*
+# Estas son necesarias para compilar dlib (cmake, build-essential) y para opencv (libgl1, libglib)
+# Utilizamos 'set -ex' y separación de comandos para mayor robustez
+RUN set -ex \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        libgl1-mesa-glx \
+        libglib2.0-0 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # 3. Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
 # 4. Copiar SOLO el requirements.txt
-# (Esto es un truco de caché: si no cambias los requirements,
-# Docker no reinstalará todo cada vez)
 COPY requirements.txt .
 
 # 5. Instalar las dependencias de Python
+# Usar --no-cache-dir ayuda con el manejo de memoria
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Copiar el RESTO del código del servicio
