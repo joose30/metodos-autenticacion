@@ -2,14 +2,12 @@
 FROM python:3.11-slim
 
 # 2. Instalar dependencias del sistema operativo (Linux)
-# Estas son necesarias para compilar dlib (cmake, build-essential) y para opencv (libgl1, libglib)
-# Utilizamos 'set -ex' y separación de comandos para mayor robustez
+# build-essential y cmake son para dlib. libglib2.0-0 es para OpenCV.
 RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         cmake \
-        libgl1-mesa-glx \
         libglib2.0-0 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -25,10 +23,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 6. Copiar el RESTO del código del servicio
-# (adapters, application, domain, infrastructure, ports, main.py)
 COPY . .
 
 # 7. Comando para iniciar el servidor
-# Render nos dará una variable $PORT, la usamos aquí.
-# Esto reemplaza el app.run() de tu main.py
 CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "adapters.http.flask_controller:app"]
