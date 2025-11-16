@@ -1,5 +1,5 @@
 # 1. Usar una imagen de Python 3.11 (compatible con dlib)
-FROM python:3.11-slim
+FROM python:3.10-slim-buster
 
 # 2. Instalar dependencias del sistema operativo (Linux)
 # build-essential y cmake son para dlib. libglib2.0-0 es para OpenCV.
