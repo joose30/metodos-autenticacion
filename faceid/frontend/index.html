@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face ID Login System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+            transform: scaleX(-1);
+        }
+
+        canvas {
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            flex: none;
+            padding: 10px 20px;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .users-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .user-item:hover {
+            background: #f9f9f9;
+            transform: translateX(5px);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .user-email {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .user-date {
+            color: #999;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .camera-status {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .camera-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .camera-status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle input {
+            padding-right: 45px;
+        }
+
+        .password-toggle button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Face ID Login</h1>
+        <p class="subtitle">Sistema de autenticación con reconocimiento facial</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login-face')">Login Facial</button>
+            <button class="tab" onclick="switchTab('login-password')">Login Contraseña</button>
+            <button class="tab" onclick="switchTab('register')">Registrarse</button>
+            <button class="tab" onclick="switchTab('users')">Usuarios</button>
+        </div>
+
+        <!-- Tab Login Facial -->
+        <div id="login-face-tab" class="tab-content active">
+            <div id="login-face-message"></div>
+            <div class="camera-status inactive" id="login-face-camera-status">
+                📷 Cámara desactivada
+            </div>
+            <div class="video-container">
+                <video id="login-face-video" autoplay></video>
+                <canvas id="login-face-canvas"></canvas>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="startCamera('login-face')">Iniciar Cámara</button>
+                <button class="btn-primary" onclick="loginWithFace()">Autenticar Rostro</button>
+            </div>
+        </div>
+
+        <!-- Tab Login con Contraseña -->
+        <div id="login-password-tab" class="tab-content">
+            <div id="login-password-message"></div>
+            <div class="input-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email">
+            </div>
+            <div class="input-group password-toggle">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Tu contraseña" autocomplete="current-password">
+                <button type="button" onclick="togglePassword('login-password')">👁️</button>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="loginWithPassword()">Iniciar Sesión</button>
+            </div>
+        </div>
+
+        <!-- Tab Register -->
+        <div id="register-tab" class="tab-content">
+            <div id="register-message"></div>
+            <div class="input-group">
+                <label for="register-first-name">Nombre *</label>
+                <input type="text" id="register-first-name" placeholder="Tu nombre" autocomplete="given-name">
+            </div>
+            <div class="input-group">
+                <label for="register-email">Email *</label>
+                <input type="email" id="register-email" placeholder="tu@email.com" autocomplete="email">
+            </div>
+            <div class="input-group password-toggle">
+                <label for="register-password">Contraseña *</label>
+                <input type="password" id="register-password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                <button type="button" onclick="togglePassword('register-password')">👁️</button>
+            </div>
+            <div class="camera-status inactive" id="register-camera-status">
+                📷 Cámara desactivada - Captura tu rostro
+            </div>
+            <div class="video-container">
+                <video id="register-video" autoplay></video>
+                <canvas id="register-canvas"></canvas>
+            </div>
+            <div class="button-group">
+                <button class="btn-secondary" onclick="startCamera('register')">Iniciar Cámara</button>
+                <button class="btn-success" onclick="registerUser()">Registrar Usuario</button>
+            </div>
+        </div>
+
+        <!-- Tab Users -->
+        <div id="users-tab" class="tab-content">
+            <div id="users-message"></div>
+            <div class="button-group" style="margin-bottom: 20px;">
+                <button class="btn-primary" onclick="loadUsers()">🔄 Actualizar Lista</button>
+            </div>
+            <div id="users-list" class="users-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let streams = {};
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            if (tabName === 'users') {
+                loadUsers();
+            }
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        async function startCamera(type) {
+            try {
+                const video = document.getElementById(`${type}-video`);
+                const status = document.getElementById(`${type}-camera-status`);
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 } 
+                });
+                
+                video.srcObject = stream;
+                streams[type] = stream;
+                
+                status.textContent = '✅ Cámara activa - Listo para capturar';
+                status.classList.remove('inactive');
+                status.classList.add('active');
+                
+            } catch (error) {
+                showMessage(type, 'No se pudo acceder a la cámara: ' + error.message, 'error');
+            }
+        }
+
+        function captureImage(type) {
+            const video = document.getElementById(`${type}-video`);
+            const canvas = document.getElementById(`${type}-canvas`);
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0);
+            
+            return canvas.toDataURL('image/jpeg', 0.9);
+        }
+
+        async function registerUser() {
+            const firstName = document.getElementById('register-first-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            
+            if (!firstName || !email || !password) {
+                showMessage('register', 'Todos los campos son requeridos', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('register', 'La contraseña debe tener al menos 6 caracteres', 'error');
+                return;
+            }
+            
+            if (!streams['register']) {
+                showMessage('register', 'Por favor inicia la cámara y captura tu rostro', 'error');
+                return;
+            }
+            
+            showMessage('register', 'Procesando registro...', 'info');
+            
+            try {
+                const imageData = captureImage('register');
+                
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        email: email,
+                        password: password,
+                        image: imageData
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('register', '✅ ' + data.message, 'success');
+                    document.getElementById('register-first-name').value = '';
+                    document.getElementById('register-email').value = '';
+                    document.getElementById('register-password').value = '';
+                    
+                    // Detener cámara
+                    if (streams['register']) {
+                        streams['register'].getTracks().forEach(track => track.stop());
+                        streams['register'] = null;
+                        document.getElementById('register-camera-status').textContent = '📷 Cámara desactivada';
+                        document.getElementById('register-camera-status').classList.remove('active');
+                        document.getElementById('register-camera-status').classList.add('inactive');
+                    }
+                } else {
+                    showMessage('register', '❌ ' + data.message, 'error');
+                }
+                
+            } catch (error) {
+                showMessage('register', '❌ Error al conectar con el servidor: ' + error.message, 'error');
+            }
+        }
+
+        async function loginWithFace() {
+            if (!streams['login-face']) {
+                showMessage('login-face', 'Por favor inicia la cámara primero', 'error');
+                return;
+            }
+            
+            showMessage('login-face', 'Autenticando rostro...', 'info');
+            
+            try {
+                const imageData = captureImage('login-face');
+                
+                const response = await fetch(`${API_URL}/login/face`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: imageData
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('login-face', 
+                        `✅ ${data.message}<br>Confianza: ${data.confidence}%<br>Email: ${data.user.email}`, 
+                        'success'
+                    );
+                } else {
+                    showMessage('login-face', '❌ ' + data.message, 'error');
+                }
+                
+            } catch (error) {
+                showMessage('login-face', '❌ Error al conectar con el servidor: ' + error.message, 'error');
+            }
+        }
+
+        async function loginWithPassword() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showMessage('login-password', 'Email y contraseña son requeridos', 'error');
+                return;
+            }
+            
+            showMessage('login-password', 'Autenticando...', 'info');
+            
+            try {
+                const response = await fetch(`${API_URL}/login/password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('login-password', 
+                        `✅ ${data.message}<br>Email: ${data.user.email}`, 
+                        'success'
+                    );
+                    
+                    document.getElementById('login-email').value = '';
+                    document.getElementById('login-password').value = '';
+                } else {
+                    showMessage('login-password', '❌ ' + data.message, 'error');
+                }
+                
+            } catch (error) {
+                showMessage('login-password', '❌ Error al conectar con el servidor: ' + error.message, 'error');
+            }
+        }
+
+        async function loadUsers() {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando usuarios...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const data = await response.json();
+                
+                if (data.success && data.users.length > 0) {
+                    usersList.innerHTML = '';
+                    data.users.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.className = 'user-item';
+                        
+                        const createdDate = user.createdAt ? 
+                            new Date(user.createdAt).toLocaleString('es-ES') : 
+                            'Fecha no disponible';
+                        
+                        userItem.innerHTML = `
+                            <div class="user-info">
+                                <div class="user-name">👤 ${user.first_name}</div>
+                                <div class="user-email">📧 ${user.email}</div>
+                                <div class="user-date">📅 ${createdDate}</div>
+                            </div>
+                            <button class="btn-danger" onclick="deleteUser(${user.id}, '${user.first_name}')">
+                                Eliminar
+                            </button>
+                        `;
+                        usersList.appendChild(userItem);
+                    });
+                } else {
+                    usersList.innerHTML = '<div class="message info">No hay usuarios registrados</div>';
+                }
+                
+            } catch (error) {
+                usersList.innerHTML = '<div class="message error">Error al cargar usuarios: ' + error.message + '</div>';
+            }
+        }
+
+        async function deleteUser(userId, firstName) {
+            if (!confirm(`¿Estás seguro de eliminar al usuario "${firstName}"?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('users', '✅ ' + data.message, 'success');
+                    loadUsers();
+                } else {
+                    showMessage('users', '❌ ' + data.message, 'error');
+                }
+                
+            } catch (error) {
+                showMessage('users', '❌ Error al eliminar usuario: ' + error.message, 'error');
+            }
+        }
+
+        function showMessage(type, message, className) {
+            const messageDiv = document.getElementById(`${type}-message`);
+            messageDiv.innerHTML = `<div class="message ${className}">${message}</div>`;
+            
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        window.addEventListener('beforeunload', () => {
+            Object.values(streams).forEach(stream => {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+            });
+        });
+
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                if (data.success) {
+                    console.log('✅ Conectado al servidor:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ No se pudo conectar al servidor');
+                alert('⚠️ No se pudo conectar al servidor. Asegúrate de que el backend esté corriendo en http://localhost:5000');
+            }
+        });
+    </script>
+</body>
+</html>
