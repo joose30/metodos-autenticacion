@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación en dos pasos</title>
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="verification.css">
+</head>
+<body> 
+    <section class="wrapper">
+		<div class="container">
+			<div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center">
+
+<form class="rounded bg-white shadow p-5">
+					<h3 class="text-dark fw-bolder fs-4 mb-2">Verificación en dos pasos</h3>
+					<div class="fw-normal text-muted mb-4">
+                        Para mayor seguridad, ingresa la contraseña temporal (OTP) generada por tu Aplicación de autenticación.
+					</div>
+
+					<div class="otp_input text-start mb-2">
+                        <label for="digit">Ingresar codigo:</label>
+						<div class="d-flex align-items-center justify-content-between mt-2">
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                        </div> 
+					</div>
+
+					<button action="POST" type="button" class="btn btn-primary submit_btn my-4">Verificar</button> 
+
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+<script src="verification.js"></script>
+</html>
+

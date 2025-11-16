@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10rem;
+  }
+  
+  .container .card {
+    padding: 10px;
+    border-radius: 15px;
+  }
+  
+  .container img {
+    border-radius: 10px;
+  }
+  
+  .card-body .card-text {
+    text-align: left;
+    margin-top: 1rem;
+    color: grey;
+  }
+  .card-body .card-text b {
+    text-align: left;
+    margin-top: 1rem;
+    color: rgb(106, 106, 106);
+  }

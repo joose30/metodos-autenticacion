@@ -1,0 +1,6 @@
+pyotp
+flask
+qrcode[pil]
+flask-cors
+pymongo
+Flask-Session

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso con SMS</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="sms.css">
+</head>
+<body>
+    <section class="py-3 py-md-5 py-xl-8">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="mb-5 text-center">
+                        <h2 class="display-5 fw-bold">Acceso con SMS</h2>
+                        <p>¿Prefieres otro método? <a href="../../access/log_in/login.html">Volver al inicio de sesión con QR</a></p>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-lg-5">
+                            <form id="smsForm">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" placeholder="Usuario" required />
+                                    <label for="username">Nombre de Usuario</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="tel" class="form-control" id="phone" placeholder="+52 1234567890" required />
+                                    <label for="phone">Número de teléfono</label>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary" id="sendOTP">
+                                        <span class="button-text">Enviar código SMS</span>
+                                        <div class="spinner-border spinner-border-sm d-none" role="status">
+                                            <span class="visually-hidden">Enviando...</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="message" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="sms.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+/* Google Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Variables */
+:root {
+    --primary-font-family: 'Poppins', sans-serif;
+    --light-white: #f5f8fa;
+    --gray-dark: #343a40;
+    --primary-color: #0d6efd;
+}
+
+/* Base */
+body {
+    font-family: var(--primary-font-family);
+    background-color: var(--light-white);
+    color: var(--gray-dark);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Navbar */
+nav {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+nav .logout-btn {
+    background-color: #fff;
+    color: var(--primary-color);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+nav .logout-btn:hover {
+    background-color: var(--light-white);
+    transform: translateY(-2px);
+}
+
+/* Welcome Section */
+.welcome {
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.welcome h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.welcome p {
+    font-size: 1rem;
+    color: var(--gray-dark);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    .welcome {
+        padding: 2rem 1rem;
+    }
+    .welcome h1 {
+        font-size: 1.6rem;
+    }
+}

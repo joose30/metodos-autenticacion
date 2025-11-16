@@ -1,0 +1,106 @@
+/* Google Poppins Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Variables */
+:root {
+    --primary-font-family: 'Poppins', sans-serif;
+    --light-white: #f5f8fa;
+    --gray: #5e6278;
+    --gray-dark: #343a40;
+    --primary-color: #0d6efd;
+}
+
+body {
+    font-family: var(--primary-font-family);
+    font-size: 14px;
+    background-color: var(--light-white);
+    min-height: 100vh;
+}
+
+/* Login/Register Card */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Form Inputs */
+.form-control {
+    background-color: var(--light-white);
+    border: 1px solid #dee2e6;
+    color: var(--gray-dark);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: none;
+}
+
+/* Floating labels */
+.form-floating > label {
+    color: var(--gray);
+    font-weight: 500;
+}
+
+/* Buttons */
+.btn-primary {
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+.btn-primary:hover {
+    background-color: darken(var(--primary-color), 5%);
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Form message text */
+#loginMessage,
+#registerMessage {
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+.otp_input input {
+    width: 14%;
+    height: 70px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+@media (max-width:1200px){
+    .otp_input input{ 
+        height:50px; 
+    }
+}
+@media (max-width:767px){
+    .otp_input input{ 
+        height:40px; 
+    }
+}
