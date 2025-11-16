@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class MongoDBUserRepository:
-    def __init__(self):
-        self.client = MongoClient('mongodb://localhost:27017/')
-        self.db = self.client['otp_db']
-        self.collection = self.db['users']
+    def __init__(self, uri="mongodb://localhost:27017", db_name="autentication"): # <-- CORREGIDO
+        self.client = MongoClient(uri)
+        self.db = self.client[db_name]
+        self.collection = self.db["users"]
         print("✅ Conectado a MongoDB: otp_db.users")
 
     def save_user(self, email, user_data):

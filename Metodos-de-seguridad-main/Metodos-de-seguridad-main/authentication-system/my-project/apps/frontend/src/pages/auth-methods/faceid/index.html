@@ -402,7 +402,7 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:5000/api';
+        const API_URL = 'http://localhost:5001/api';
         let streams = {};
 
         function switchTab(tabName) {
@@ -443,10 +443,18 @@
             }
         }
 
-        function captureImage(type) {
+       function captureImage(type) {
             const video = document.getElementById(`${type}-video`);
             const canvas = document.getElementById(`${type}-canvas`);
             const context = canvas.getContext('2d');
+            
+            // --- INICIO DE LA CORRECCIÓN ---
+            // Comprobar si el video tiene un tamaño válido
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                console.error("Error de captura: El video no tiene datos de fotograma.");
+                return null; // Devolver nulo para que la validación falle
+            }
+            // --- FIN DE LA CORRECCIÓN ---
             
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
@@ -478,11 +486,18 @@
                 return;
             }
             
+            const imageData = captureImage('register');
+            
+            // --- INICIO DE LA CORRECCIÓN ---
+            if (!imageData) {
+                showMessage('register', '❌ Error al capturar la imagen. Espera un segundo a que la cámara inicie y vuelve a intentarlo.', 'error');
+                return;
+            }
+            // --- FIN DE LA CORRECCIÓN ---
+            
             showMessage('register', 'Procesando registro...', 'info');
             
             try {
-                const imageData = captureImage('register');
-                
                 const response = await fetch(`${API_URL}/register`, {
                     method: 'POST',
                     headers: {
@@ -504,7 +519,6 @@
                     document.getElementById('register-email').value = '';
                     document.getElementById('register-password').value = '';
                     
-                    // Detener cámara
                     if (streams['register']) {
                         streams['register'].getTracks().forEach(track => track.stop());
                         streams['register'] = null;

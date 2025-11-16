@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from ports.user_repository_port import UserRepositoryPort
 
 class MongoUserRepository(UserRepositoryPort):
-    def __init__(self, uri="mongodb://localhost:27017", db_name="otp_db"):
+    def __init__(self, uri="mongodb://localhost:27017", db_name="autentication"): # <-- CORREGIDO
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db["users"]
